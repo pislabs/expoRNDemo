@@ -1,9 +1,50 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
+import { Button, Stack, View, Text, getTokens, styled } from 'tamagui';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { AnimationsDemo } from '@/components/demos/AnimationsDemo';
+
+const StyledView = styled(View, {
+  padding: 10,
+  backgroundColor: '$red11',
+  borderRadius: '$1'
+})
+
+const CalHeader = styled(Text, {
+  variants: {
+    isHero: {
+      true: {
+        fontSize: 30,
+        backgroundColor: 'blue',
+        color: 'white',
+        borderRadius: 5
+      },
+    },
+  },
+})
+
+const StyledText = styled(Text)
+
+// note the styleable wrapper here:
+const HigherOrderStyledText = StyledText.styleable((props, ref) => (
+  <StyledText ref={ref} {...props} />
+))
+
+const StyledHigherOrderStyledText = styled(HigherOrderStyledText, {
+  variants: {
+    isHero: {
+      true: {
+        fontSize: 16,
+        backgroundColor: 'red',
+        color: 'white',
+        borderRadius: 5,
+        padding: 10
+      },
+    },
+  },
+})
+
+// console.log("StyledHigherOrderStyledText.staticConfig ---------->", StyledHigherOrderStyledText.staticConfig)
 
 export default function HomeScreen() {
   return (
@@ -15,41 +56,45 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+        
+      <View>
+        <Button theme="blue">Hello World</Button>
+      </View>
+
+      <View>
+        <Text>{`${JSON.stringify(getTokens().size.small)}`}</Text>
+        <Text>{`${JSON.stringify(getTokens().size.small.variable)}`}</Text>
+      </View>
+
+      <View mx="$small" width="$icon.small" backgroundColor="$red3">
+        <Text color="$color">S</Text>
+      </View>
+
+      <View  width="$icon.middle" backgroundColor="$blue3">
+        <Text>M</Text>
+      </View>
+
+      <StyledView focusStyle={{backgroundColor: 'green'}}>
+        <Text>StyledView</Text>
+      </StyledView>
+
+      <View>
+        <CalHeader isHero={true} > isHero: true</CalHeader>
+        <CalHeader isHero={true} fontSize={20}> isHero: true, fontSize: 20</CalHeader>
+        <CalHeader isHero={false} > isHero: false</CalHeader>
+      </View>
+
+      <View>
+        <StyledHigherOrderStyledText isHero={true}>StyledHigherOrderStyledText</StyledHigherOrderStyledText>
+      </View>
+
+      <View>
+        <AnimationsDemo>
+          <View width={50} height={50} backgroundColor={"red"}>
+            <Text>OK</Text>
+          </View>
+        </AnimationsDemo>
+      </View>
     </ParallaxScrollView>
   );
 }
