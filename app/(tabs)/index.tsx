@@ -1,11 +1,20 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { Image, StyleSheet, Platform, View, Text } from 'react-native';
+import { Appbar, Button, Avatar, Badge, Banner } from 'react-native-paper';
 
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+
+import { useAppTheme } from '@/hooks/useAppTheme';
+import React from 'react';
+
+const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 
 export default function HomeScreen() {
+  const theme = useAppTheme();
+
+  const [visible, setVisible] = React.useState(true);
+
+  console.log('App theme --------->', theme)
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
@@ -15,41 +24,50 @@ export default function HomeScreen() {
           style={styles.reactLogo}
         />
       }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
+      <Appbar.Header>
+        <Appbar.BackAction onPress={() => {}} />
+        <Appbar.Content title="Title" />
+        <Appbar.Action icon="magnify" onPress={() => {}} />
+        <Appbar.Action icon={MORE_ICON} onPress={() => {}} />
+      </Appbar.Header>
+      <View style={{ backgroundColor: theme.colors.brandPrimary }}>
+        <Button icon="camera" raised theme={{ roundness: 3 }}>
+          Press me
+        </Button>
+      </View>
+
+      <View>
+        <Avatar.Icon size={24} icon="folder" />
+        <Badge>3</Badge>
+      </View>
+
+      <View>
+        <Banner
+          visible={visible}
+          actions={[
+            {
+              label: 'Fix it',
+              onPress: () => setVisible(false),
+            },
+            {
+              label: 'Learn more',
+              onPress: () => setVisible(false),
+            },
+          ]}
+          icon={({size}) => (
+            <Image
+              source={{
+                uri: 'https://avatars3.githubusercontent.com/u/17571969?s=400&v=4',
+              }}
+              style={{
+                width: size,
+                height: size,
+              }}
+            />
+          )}>
+          There was a problem processing a transaction on your credit card.
+        </Banner>
+      </View>
     </ParallaxScrollView>
   );
 }
